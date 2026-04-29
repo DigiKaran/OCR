@@ -2,11 +2,16 @@ from pydantic_settings import BaseSettings
 import os
 import json
 from pathlib import Path
+import platform
 
 class Settings(BaseSettings):
     FIREBASE_CREDENTIALS_PATH: str = "./serviceAccountKey.json"
     FIREBASE_CREDENTIALS_JSON: str = ""  # Environment variable with full JSON
-    TESSERACT_PATH: str = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+    # Auto-detect Tesseract path based on OS
+    TESSERACT_PATH: str = (
+        "/usr/bin/tesseract" if platform.system() != "Windows"
+        else r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+    )
 
     class Config:
         env_file = ".env"
